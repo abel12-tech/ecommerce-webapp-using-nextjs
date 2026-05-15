@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useCartStore } from "@/store/cartStore";
 import type { Product } from "@/types/product";
 import Button from "@/components/ui/Button";
 
@@ -10,22 +11,17 @@ type AddToCartButtonProps = {
 
 export default function AddToCartButton({ product }: AddToCartButtonProps) {
   const [added, setAdded] = useState(false);
+  const addItem = useCartStore((state) => state.addItem);
 
   function handleAdd() {
-    // Phase 6: replace this with useCartStore
-    console.log("Add to cart:", product.title);
+    addItem(product);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   }
 
   return (
     <div className="flex flex-col gap-3">
-      <Button
-        onClick={handleAdd}
-        size="lg"
-        className="w-full"
-        disabled={added}
-      >
+      <Button onClick={handleAdd} size="lg" className="w-full" disabled={added}>
         {added ? (
           <>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,7 +39,6 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
           </>
         )}
       </Button>
-
       <Button variant="secondary" size="lg" className="w-full">
         Save for later
       </Button>
