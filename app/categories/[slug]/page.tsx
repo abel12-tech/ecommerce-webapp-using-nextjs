@@ -7,8 +7,13 @@ import ProductGrid from "@/components/products/ProductGrid";
 
 // pre-build all category pages at deploy time
 export async function generateStaticParams() {
-  const slugs = await getAllCategorySlugs();
-  return slugs.map((slug) => ({ slug }));
+  try {
+    const slugs = await getAllCategorySlugs();
+    return slugs.map((slug) => ({ slug }));
+  } catch (error) {
+    console.warn("Could not fetch category slugs at build time:", error);
+    return []; // pages will be generated on first request instead
+  }
 }
 
 export async function generateMetadata({

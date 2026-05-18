@@ -11,8 +11,13 @@ import ProductGrid from "@/components/products/ProductGrid";
 
 // pre-build all 20 product pages at deploy time
 export async function generateStaticParams() {
-  const ids = await getAllProductIds();
-  return ids.map((id) => ({ id: String(id) }));
+  try {
+    const ids = await getAllProductIds();
+    return ids.map((id) => ({ id: String(id) }));
+  } catch (error) {
+    console.warn("Could not fetch product IDs at build time:", error);
+    return [];
+  }
 }
 
 // dynamic SEO metadata per product
